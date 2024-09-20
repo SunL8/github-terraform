@@ -9,6 +9,13 @@ terraform {
       version = "3.5.1"
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "rg-backend-tfstate-wso"
+    storage_account_name = "sabetfsdn6p8"
+    container_name       = "tfstate"
+    key                  = "web-demo.terraform.tfstate"
+    # Credentials will be pulled from environment variables
+  }
 }
 
 provider "azurerm" {
