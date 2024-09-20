@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "3.73.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.5.1"
+    }
   }
 }
 
@@ -16,15 +20,15 @@ provider "azurerm" {
   }
 }
 
+resource "azurerm_resource_group" "rg_backend" {
+  name     = var.rg_backend_name
+  location = var.rg_backend_location
+}
+
 resource "random_string" "random_string" {
   length  = 5
   special = false
   upper   = false
-}
-
-resource "azurerm_resource_group" "rg-backend" {
-  name     = var.rg_backend_name
-  location = var.rg_backend_location
 }
 
 resource "azurerm_storage_account" "sa_backend" {
@@ -64,7 +68,7 @@ resource "azurerm_key_vault" "kv_backend" {
     ]
 
     secret_permissions = [
-      "Get","Set","List"
+      "Get","Set","List","Delete"
     ]
 
     storage_permissions = [
