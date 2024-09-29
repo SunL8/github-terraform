@@ -31,14 +31,14 @@ resource "azurerm_storage_account" "sa_web" {
     }
 }
 
-# AAdd a index.html file to the storage account
+# Add a index.html file to the storage account
 resource "azurerm_storage_blob" "index_html" {
   name                   = var.index_document
   storage_account_name   = azurerm_storage_account.sa_web.name
   storage_container_name = "$web"
   type                   = "Block"
   content_type           = "text/html"
-  content                = "${var.source_content}${local.web_suffix}"
+  source_content         = "${var.source_content}${local.web_suffix}"
 }
 
 output "primary_web_endpoint" {
