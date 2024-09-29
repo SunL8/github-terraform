@@ -37,8 +37,8 @@ resource "azurerm_storage_blob" "index_html" {
   storage_account_name   = azurerm_storage_account.sa_web.name
   storage_container_name = "$web"
   type                   = "Block"
-  content_type = "text/html"
-  source                 = "${var.source_content}${local.web_suffix}"
+  content_type           = "text/html"
+  content                = "${var.source_content}${local.web_suffix}"
 }
 
 output "primary_web_endpoint" {
