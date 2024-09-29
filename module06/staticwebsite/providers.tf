@@ -3,7 +3,6 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "4.2.0"
-      skip_provider_registration = true
     }
   }
   backend "azurerm" {
