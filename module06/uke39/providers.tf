@@ -1,3 +1,5 @@
+# providers.tf
+
 terraform {
   required_providers {
     azurerm = {
@@ -15,6 +17,9 @@ terraform {
 }
 
 provider "azurerm" {
-  subscription_id = "30ee9279-e76e-409d-8973-00c9792f6bcb"
+  client_id       = var.ARM_CLIENT_ID
+  client_secret   = var.ARM_CLIENT_SECRET
+  subscription_id = var.ARM_SUBSCRIPTION_ID
+  tenant_id       = var.ARM_TENANT_ID
   features {}
 }
