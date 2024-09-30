@@ -17,13 +17,8 @@ env:
   TF_WORKING_DIR: ./module06/staticwebsite
 
 jobs:
-  terraform:
+  test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        workspace: ['test', 'production']
-    environment: ${{ (matrix.workspace == 'production') && 'production' || 'test' }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -37,7 +32,34 @@ jobs:
 
       - name: Terraform Workspace Select or Create
         run: |
-          terraform workspace select ${{ matrix.workspace }} || terraform workspace new ${{ matrix.workspace }}
+          terraform workspace select test || terraform workspace new test
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan -input=false
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Apply
+        run: terraform apply -input=false -auto-approve tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+  production:
+    needs: test  # This ensures the 'production' job runs after 'test' completes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Workspace Select or Create
+        run: |
+          terraform workspace select production || terraform workspace new production
         working-directory: ${{ env.TF_WORKING_DIR }}
 
       - name: Terraform Plan
