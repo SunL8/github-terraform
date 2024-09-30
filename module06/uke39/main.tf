@@ -1,4 +1,3 @@
-# main.tf
 locals {
   workspace      = terraform.workspace
   name_suffix    = terraform.workspace != "default" ? "-${terraform.workspace}" : ""
