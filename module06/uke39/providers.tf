@@ -9,7 +9,7 @@ terraform {
     resource_group_name  = "rg-backend-tfstate-wso"
     storage_account_name = "sabetfsdn6p8"
     container_name       = "tfstate"
-    key                  = "web.terraform.tfstate"
+    key                  = "magi.terraform.tfstate"
     # Credentials will be pulled from environment variables
   }
 }
