@@ -57,16 +57,17 @@ resource "random_password" "password" {
 
 # Create Linux Virtual Machine
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = local.vm_name
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
-  size                = "Standard_B1ls"
-  admin_username      = "azureuser"
+  name                  = local.vm_name
+  resource_group_name   = azurerm_resource_group.rg.name
+  location              = var.location
+  size                  = "Standard_B1ls"
+  admin_username        = "azureuser"
   network_interface_ids = [
     azurerm_network_interface.nic.id,
   ]
 
-  admin_password = random_password.password.result
+  admin_password                  = random_password.password.result
+  disable_password_authentication = false  # Added this line
 
   os_disk {
     caching              = "ReadWrite"
