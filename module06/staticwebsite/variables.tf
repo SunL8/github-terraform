@@ -7,7 +7,7 @@ variable "location" {
 variable "rg_name" {
   description = "The name of the Resource Group in which the resources should be deployed."
   type        = string
-  default     = "rg-web"
+  default     = "wso-rg-web"
 }
 
 variable "sa_name" {
@@ -19,7 +19,7 @@ variable "sa_name" {
 variable "source_content" {
   description = "The content of the index.html file."
   type        = string
-  default     = "<h1>Web page created with Terraform</h1>"
+  default     = "<h1>Web page created with Terraform - CI/CD</h1>"
 }
 
 variable "index_document" {
