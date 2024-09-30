@@ -1,0 +1,54 @@
+# .github/workflows/terraform-azure.yml
+name: Terraform Azure CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'module06/uke39/**'
+  workflow_dispatch:
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  TF_WORKING_DIR: ./module06/staticwebsite
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        workspace: ['test', 'production']
+    environment: ${{ matrix.workspace }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Workspace Select or Create
+        run: |
+          terraform workspace select ${{ matrix.workspace }} || terraform workspace new ${{ matrix.workspace }}
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan -input=false
+        working-directory: ${{ env.TF_WORKING_DIR }}
+
+      # Manual approval for production
+      - name: Wait for Approval
+        if: matrix.workspace == 'production'
+        uses: hmarr/auto-approve-action@v2
+
+      - name: Terraform Apply
+        run: terraform apply -input=false -auto-approve tfplan
+        working-directory: ${{ env.TF_WORKING_DIR }}
