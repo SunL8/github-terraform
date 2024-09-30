@@ -19,6 +19,8 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      WORKSPACE: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,12 +29,12 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        run: terraform init -input=false
+        run: terraform init -input=false -backend-config="key=web.${{ env.WORKSPACE }}.tfstate"
         working-directory: ${{ env.TF_WORKING_DIR }}
 
       - name: Terraform Workspace Select or Create
         run: |
-          terraform workspace select test || terraform workspace new test
+          terraform workspace select ${{ env.WORKSPACE }} || terraform workspace new ${{ env.WORKSPACE }}
         working-directory: ${{ env.TF_WORKING_DIR }}
 
       - name: Terraform Plan
@@ -44,8 +46,10 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
 
   production:
-    needs: test  # This ensures the 'production' job runs after 'test' completes
+    needs: test
     runs-on: ubuntu-latest
+    env:
+      WORKSPACE: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -54,12 +58,12 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        run: terraform init -input=false
+        run: terraform init -input=false -backend-config="key=web.${{ env.WORKSPACE }}.tfstate"
         working-directory: ${{ env.TF_WORKING_DIR }}
 
       - name: Terraform Workspace Select or Create
         run: |
-          terraform workspace select production || terraform workspace new production
+          terraform workspace select ${{ env.WORKSPACE }} || terraform workspace new ${{ env.WORKSPACE }}
         working-directory: ${{ env.TF_WORKING_DIR }}
 
       - name: Terraform Plan
