@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         workspace: ['test', 'production']
-    environment: ${{ matrix.workspace }}
+    environment: ${{ (matrix.workspace == 'production') && 'production' || 'test' }}
 
     steps:
       - name: Checkout code
@@ -43,11 +43,6 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan -input=false
         working-directory: ${{ env.TF_WORKING_DIR }}
-
-      # Manual approval for production
-      - name: Wait for Approval
-        if: matrix.workspace == 'production'
-        uses: hmarr/auto-approve-action@v2
 
       - name: Terraform Apply
         run: terraform apply -input=false -auto-approve tfplan
