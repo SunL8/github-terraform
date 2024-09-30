@@ -1,0 +1,97 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    paths:
+      - "module06/uke39/**"
+  workflow_dispatch:
+    inputs:
+      destroy:
+        description: "Set to true to destroy resources"
+        required: false
+        default: "false"
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  WORKING_DIR: ./module06/uke39
+
+jobs:
+  test_environment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Workspace Select or Create (test)
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform workspace select test || terraform workspace new test
+
+      - name: Terraform Plan (test)
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform plan
+
+      - name: Terraform Apply (test)
+        if: ${{ github.event.inputs.destroy != 'true' }}
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform apply --auto-approve
+
+      - name: Terraform Destroy (test)
+        if: ${{ github.event.inputs.destroy == 'true' }}
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform destroy --auto-approve
+
+      - name: Output Test VM Public IP
+        if: ${{ github.event.inputs.destroy != 'true' }}
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          echo "Test VM IP: $(terraform output public_ip_address)"
+
+  production_environment:
+    needs: test_environment
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform init
+
+      - name: Terraform Workspace Select or Create (production)
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform workspace select production || terraform workspace new production
+
+      - name: Terraform Plan (production)
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform plan
+
+      - name: Terraform Apply (production)
+        if: ${{ github.event.inputs.destroy != 'true' }}
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform apply --auto-approve
+
+      - name: Terraform Destroy (production)
+        if: ${{ github.event.inputs.destroy == 'true' }}
+        working-directory: ${{ env.WORKING_DIR }}
+        run: terraform destroy --auto-approve
+
+      - name: Output Production VM Public IP
+        if: ${{ github.event.inputs.destroy != 'true' }}
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          echo "Production VM IP: $(terraform output public_ip_address)"
