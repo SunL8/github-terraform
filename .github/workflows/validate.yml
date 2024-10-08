@@ -6,9 +6,8 @@ name: Validate Infrastructure
 on:
   # Triggers the workflow on push or pull request events
   push:
-    branches:
-      -'*'
-      - '!main'
+    branches-ignore:
+      - 'main'
     paths:
       - 'module07/demo-infra/**'
 
