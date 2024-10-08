@@ -5,10 +5,9 @@ name: Validate Infrastructure
 # Controls when the workflow will run
 on:
   push:
-    branches-ignore:
-      - 'main'
     branches:
       - '*'
+      - '!main'
     paths:
       - 'module07/demo-infra/**'
 
