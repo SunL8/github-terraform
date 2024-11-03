@@ -1,24 +1,25 @@
 terraform {
   required_providers {
     azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.73.0"
+      source = "hashicorp/azurerm"
+      version = "4.8.0"
     }
     random = {
-      source  = "hashicorp/random"
-      version = "3.5.1"
+      source = "hashicorp/random"
+      version = "3.6.3"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "rg-backend-tfstate-wso"
-    storage_account_name = "sabetfsdn6p8"
+    backend "azurerm" {
+    resource_group_name  = "wso-rg-backend"
+    storage_account_name = "sabetfsaini2"
     container_name       = "tfstate"
-    key                  = "web-demo.terraform.tfstate"
+    key                  = "web.terraform.tfstate"
     # Credentials will be pulled from environment variables
   }
 }
 
 provider "azurerm" {
+  subscription_id = "30ee9279-e76e-409d-8973-00c9792f6bcb"
   features {
     key_vault {
       purge_soft_delete_on_destroy    = true
