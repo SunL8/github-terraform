@@ -1,0 +1,5 @@
+resource_group_name = "wso-rg-dev"
+location            = "West Europe"
+admin_username      = "devadmin"
+container_name      = "dev-container"
+runtime_stack       = "NODE|14-lts"

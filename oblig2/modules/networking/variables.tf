@@ -1,3 +1,8 @@
+variable "environment" {
+  type        = string
+  description = "Deployment environment (dev, staging, prod)"
+}
+
 variable "vnet_name" {
   type        = string
   description = "Name of the virtual network"

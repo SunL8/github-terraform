@@ -1,121 +1,92 @@
-# General settings
-variable "resource_group_name" {
-  description = "Name of the resource group"
+// deployments/variables.tf
+
+variable "environment" {
   type        = string
+  description = "Deployment environment (e.g., dev, staging, prod)"
+  default     = terraform.workspace
 }
 
 variable "location" {
-  description = "Azure region for resources"
   type        = string
+  description = "Azure location for deployment"
 }
 
-# Networking variables
-variable "vnet_name" {
-  description = "Name of the Virtual Network"
+variable "resource_group_name" {
   type        = string
-}
-
-variable "subnets" {
-  description = "Map of subnet names to their CIDR blocks"
-  type        = map(string)
-}
-
-# App Service variables
-variable "app_service_plan_name" {
-  description = "Name of the App Service Plan"
-  type        = string
-}
-
-variable "app_service_name" {
-  description = "Name of the App Service"
-  type        = string
-}
-
-variable "app_service_tier" {
-  description = "App Service pricing tier (e.g., 'Standard')"
-  type        = string
-}
-
-variable "app_service_size" {
-  description = "App Service instance size (e.g., 'S1')"
-  type        = string
-}
-
-variable "linux_fx_version" {
-  description = "Runtime stack version for Linux App Service (e.g., 'NODE|14-lts')"
-  type        = string
-}
-
-variable "app_settings" {
-  description = "App settings for the App Service"
-  type        = map(string)
-  default     = {}
-}
-
-# Database variables
-variable "sql_server_name" {
-  description = "Name of the SQL server"
-  type        = string
+  description = "Name of the resource group for deployment"
 }
 
 variable "admin_username" {
-  description = "SQL Server administrator username"
   type        = string
+  description = "Admin username for the SQL server"
 }
 
 variable "admin_password" {
-  description = "SQL Server administrator password"
   type        = string
+  description = "Admin password for the SQL server"
   sensitive   = true
 }
 
-variable "database_name" {
-  description = "Name of the SQL database"
+variable "database_collation" {
   type        = string
-}
-
-variable "collation" {
-  description = "Collation for SQL database"
-  type        = string
+  description = "Collation for the SQL database"
   default     = "SQL_Latin1_General_CP1_CI_AS"
 }
 
-variable "license_type" {
-  description = "License type for SQL Server (e.g., 'LicenseIncluded' or 'BasePrice')"
-  type        = string
-  default     = "LicenseIncluded"
-}
-
 variable "max_size_gb" {
-  description = "Max size of the SQL database in GB"
   type        = number
-  default     = 5
+  description = "Maximum size of the SQL database in GB"
+  default     = 2
 }
 
 variable "sku_name" {
-  description = "SKU name for SQL Database (e.g., 'GP_Gen5_2')"
   type        = string
+  description = "SKU for the service plan or SQL database"
+  default     = "B1" // Basic SKU for school purposes
 }
 
-variable "enclave_type" {
-  description = "Enclave type for SQL database"
+variable "runtime_stack" {
   type        = string
-  default     = "None"
+  description = "Runtime stack for the app service (e.g., NODE|14-lts)"
 }
 
-# Storage variables
+variable "auth_enabled" {
+  type        = bool
+  description = "Enable or disable authentication for the app service"
+  default     = false
+}
+
+variable "os_type" {
+  type        = string
+  description = "Operating system for the app service plan"
+  default     = "Linux"
+}
+
 variable "container_name" {
-  description = "Name of the Blob Storage container"
   type        = string
+  description = "Name of the storage container"
 }
 
-# Load Balancer variables
-variable "public_ip_name" {
-  description = "Name of the Public IP for the Load Balancer"
+variable "vnet_name" {
   type        = string
+  description = "Name of the virtual network"
 }
 
-variable "lb_name" {
-  description = "Name of the Load Balancer"
+variable "vnet_address_space" {
+  type        = list(string)
+  description = "Address space for the virtual network"
+  default     = ["10.0.0.0/16"]
+}
+
+variable "nsg_name" {
   type        = string
+  description = "Name of the network security group"
+}
+
+variable "subnet_configs" {
+  type        = list(object({
+    name           = string
+    address_prefix = list(string)
+  }))
+  description = "List of subnet configurations"
 }
