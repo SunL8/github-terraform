@@ -30,7 +30,7 @@ variable "database_collation" {
   default     = "SQL_Latin1_General_CP1_CI_AS"
 }
 
-variable "sql_sku_name" {
+variable "sku_name" {
   type        = string
   description = "The SKU for the SQL Database"
   default     = "S0"

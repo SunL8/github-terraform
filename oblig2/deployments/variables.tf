@@ -36,10 +36,14 @@ variable "max_size_gb" {
   default     = 2
 }
 
-variable "sku_name" {
+variable "app_service_sku_name" {
   type        = string
-  description = "SKU for the service plan or SQL database"
-  default     = "B1" // Basic SKU for school purposes
+  description = "SKU for the App Service plan"
+}
+
+variable "sql_sku_name" {
+  type        = string
+  description = "SKU for the SQL database"
 }
 
 variable "runtime_stack" {
