@@ -19,7 +19,7 @@ variable "os_type" {
   default     = "Linux"
 }
 
-variable "sku_name" {
+variable "app_service_sku_name" {
   type        = string
   description = "The SKU tier for the App Service Plan"
   default     = "B1"
