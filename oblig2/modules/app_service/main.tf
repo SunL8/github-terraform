@@ -6,15 +6,15 @@ resource "azurerm_service_plan" "app_service_plan" {
   sku_name            = var.sku_name
 }
 
-resource "azurerm_app_service" "app_service" {
+resource "azurerm_linux_web_app" "app_service" {
   name                = "${var.environment}-app-service"
   resource_group_name = var.resource_group_name
   location            = var.location
-  app_service_plan_id = azurerm_service_plan.app_service_plan.id
+  service_plan_id     = azurerm_service_plan.app_service_plan.id
 
   site_config {
-    always_on = true  // Ensures the app is always ready to serve traffic
-    linux_fx_version = var.runtime_stack // Sets the runtime stack (e.g., "NODE|14-lts")
+    always_on        = true
+    linux_fx_version = var.runtime_stack
   }
 
   auth_settings {
