@@ -1,7 +1,10 @@
+locals {
+  environment = terraform.workspace
+}
 
 module "networking" {
   source               = "../modules/networking"
-  environment          = var.environment
+  environment          = local.environment
   location             = var.location
   resource_group_name  = var.resource_group_name
   vnet_name            = var.vnet_name
@@ -12,7 +15,7 @@ module "networking" {
 
 module "app_service" {
   source               = "../modules/app_service"
-  environment          = var.environment
+  environment          = local.environment
   location             = var.location
   resource_group_name  = var.resource_group_name
   os_type              = var.os_type
@@ -23,7 +26,7 @@ module "app_service" {
 
 module "database" {
   source               = "../modules/database"
-  environment          = var.environment
+  environment          = local.environment
   location             = var.location
   resource_group_name  = var.resource_group_name
   admin_username       = var.admin_username
@@ -35,14 +38,14 @@ module "database" {
 
 module "load_balancer" {
   source               = "../modules/load_balancer"
-  environment          = var.environment
+  environment          = local.environment
   location             = var.location
   resource_group_name  = var.resource_group_name
 }
 
 module "storage" {
   source               = "../modules/storage"
-  environment          = var.environment
+  environment          = local.environment
   location             = var.location
   resource_group_name  = var.resource_group_name
   container_name       = var.container_name
