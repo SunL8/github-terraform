@@ -1,0 +1,25 @@
+location              = "westeurope"
+environment           = "staging"
+nsg_name              = "my-nsg-staging"
+resource_group_name   = "wso-rg-backend"
+vnet_name             = "my-vnet-staging"
+os_type               = "Linux"
+app_service_sku_name  = "B1"
+sql_sku_name          = "Basic"
+runtime_stack         = "NODE|14-lts"
+auth_enabled          = false
+admin_username        = "adminuser"
+max_size_gb           = 2
+database_collation    = "SQL_Latin1_General_CP1_CI_AS"
+container_name        = "my-container"
+vnet_address_space    = ["10.0.0.0/16"]
+subnet_configs        = [
+  {
+    name           = "subnet1"
+    address_prefix = ["10.0.1.0/24"]
+  },
+  {
+    name           = "subnet2"
+    address_prefix = ["10.0.2.0/24"]
+  }
+]
