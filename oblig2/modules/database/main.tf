@@ -1,5 +1,11 @@
+resource "random_string" "unique_suffix" {
+  length  = 4
+  special = false
+  upper   = false
+}
+
 resource "azurerm_mssql_server" "sql_server" {
-  name                         = "${var.environment}-sqlserver"
+  name                         = "${var.environment}-sqlserver-${random_string.unique_suffix.result}"
   resource_group_name          = var.resource_group_name
   location                     = var.location
   version                      = "12.0"

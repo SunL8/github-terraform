@@ -1,7 +1,7 @@
 location              = "westeurope"
 environment           = "dev"
 nsg_name              = "my-nsg-dev"
-resource_group_name   = "my-resource-group-dev"
+resource_group_name   = "wso-rg-backend"
 vnet_name             = "my-vnet-dev"
 os_type               = "Linux"
 app_service_sku_name  = "B1"
