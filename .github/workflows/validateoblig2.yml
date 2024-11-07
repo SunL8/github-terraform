@@ -2,10 +2,12 @@ name: Validate Infrastructure
 
 on:
   push:
-    branches-ignore:
-      - "main"
+    branches:
+      - 'dev'
+      - 'staging'
+      - 'prod'
     paths:
-      - "oblig2/**/*.tf"
+      - 'oblig2/**'
 
 jobs:
   terraform:
