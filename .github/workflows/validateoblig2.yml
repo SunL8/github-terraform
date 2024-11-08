@@ -2,7 +2,7 @@ name: Validate Infrastructure
 
 on:
   push:
-    branches-ignore:
+    branches:
       - "main"
     paths:
       - "oblig2/**"
