@@ -3,9 +3,7 @@ name: Validate Infrastructure
 on:
   push:
     branches:
-      - 'dev'
-      - 'staging'
-      - 'prod'
+      - 'main'
     paths:
       - 'oblig2/**'
 
