@@ -11,7 +11,7 @@ terraform {
   }
     backend "azurerm" {
     resource_group_name  = "wso-rg-backend"
-    storage_account_name = "sabetfxv1d0"
+    storage_account_name = "sabetfsxv1d0"
     container_name       = "tfstate"
     key                  = "backend.terraform.tfstate"
     # Credentials will be pulled from environment variables
