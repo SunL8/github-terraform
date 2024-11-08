@@ -32,7 +32,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Terraform Apply Dev
-        run: terraform apply --auto-approve -var-file="terraform.tfvars.dev"
+        run: terraform apply --auto-approve -var-file="terraform.tfvars.dev" -var="admin_password=${{ env.ADMIN_PASSWORD }}"
         working-directory: ${{ env.WORKING_DIR }}
 
   stage_prod:
@@ -51,7 +51,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Terraform Apply Staging
-        run: terraform apply --auto-approve -var-file="terraform.tfvars.staging"
+        run: terraform apply --auto-approve -var-file="terraform.tfvars.staging" -var="admin_password=${{ env.ADMIN_PASSWORD }}"
         working-directory: ${{ env.WORKING_DIR }}
 
   prod:
@@ -72,7 +72,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Terraform Plan Prod
-        run: terraform plan -var-file="terraform.tfvars.prod"
+        run: terraform plan -var-file="terraform.tfvars.prod" -var="admin_password=${{ env.ADMIN_PASSWORD }}"
         working-directory: ${{ env.WORKING_DIR }}
 
       - name: Manual Approval for Production
@@ -81,5 +81,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Terraform Apply Prod
-        run: terraform apply --auto-approve -var-file="terraform.tfvars.prod"
+        run: terraform apply --auto-approve -var-file="terraform.tfvars.prod" -var="admin_password=${{ env.ADMIN_PASSWORD }}"
         working-directory: ${{ env.WORKING_DIR }}
