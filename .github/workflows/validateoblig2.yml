@@ -2,25 +2,26 @@ name: Validate Infrastructure
 
 on:
   push:
-    branches:
-      - 'main'
+    branches-ignore:
+      - "main"
     paths:
-      - 'oblig2/**'
+      - "oblig2/**"
+  pull_request:
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  WORKING_DIR: oblig2/deployments
 
 jobs:
-  terraform:
-    name: Validate
+  validate:
     runs-on: ubuntu-latest
 
-    env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      WORKING_DIR: ./oblig2  # Set to the oblig2 directory
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Terraform Init
         run: terraform init
@@ -28,4 +29,21 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Install tflint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      - name: Run tflint
+        run: tflint --init && tflint
+        working-directory: ${{ env.WORKING_DIR }}
+
+      - name: Install tfsec
+        run: |
+          curl -L "$(curl -s https://api.github.com/repos/aquasecurity/tfsec/releases/latest | grep "browser_download_url.*tfsec-linux-amd64" | cut -d : -f 2,3 | tr -d \")" -o /usr/local/bin/tfsec
+          chmod +x /usr/local/bin/tfsec
+
+      - name: Run tfsec
+        run: tfsec
         working-directory: ${{ env.WORKING_DIR }}
