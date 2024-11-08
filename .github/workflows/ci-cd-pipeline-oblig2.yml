@@ -6,6 +6,8 @@ on:
       - 'dev'
       - 'staging'
       - 'prod'
+    paths:
+      - 'oblig2/**'
   workflow_dispatch:
 
 env:
