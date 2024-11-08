@@ -3,12 +3,11 @@ name: Terraform CI/CD
 on:
   push:
     branches:
-      - 'dev'
-      - 'staging'
-      - 'prod'
+      - 'main'
     paths:
       - 'oblig2/**'
   workflow_dispatch:
+
 
 env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
