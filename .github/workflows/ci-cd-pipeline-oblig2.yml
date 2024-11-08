@@ -14,7 +14,7 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-  WORKING_DIR: ./deployments
+  WORKING_DIR: oblig2/deployments
 
 jobs:
   dev_stage:
