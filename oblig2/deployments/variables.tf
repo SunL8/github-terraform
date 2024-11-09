@@ -85,7 +85,7 @@ variable "nsg_name" {
 }
 
 variable "subnet_configs" {
-  type        = list(object({
+  type = list(object({
     name           = string
     address_prefix = list(string)
   }))
