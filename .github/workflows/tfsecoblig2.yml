@@ -1,0 +1,25 @@
+name: Terraform Security Check
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'oblig2/**'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  security_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install tfsec
+        run: |
+          curl -L "$(curl -s https://api.github.com/repos/aquasecurity/tfsec/releases/latest | grep "browser_download_url.*tfsec-linux-amd64" | cut -d : -f 2,3 | tr -d \")" -o /usr/local/bin/tfsec
+          chmod +x /usr/local/bin/tfsec
+
+      - name: Run tfsec
+        run: tfsec -m CRITICAL oblig2/deployments
